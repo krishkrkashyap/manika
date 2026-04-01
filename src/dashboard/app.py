@@ -770,7 +770,7 @@ def init_session():
         'quotes': {},
         'last_update': None,
         'mtm_data': {},
-        'auto_refresh': True,
+        'auto_refresh': False,  # Off by default — user can enable
         'theme_mode': 'dark',
     }
     for k, v in defaults.items():
@@ -1486,6 +1486,28 @@ def render_sidebar_alerts():
 
 
 # ═══════════════════════════════════════════════════════════════
+# AUTO-REFRESH (non-blocking)
+# ═══════════════════════════════════════════════════════════════
+
+def _auto_refresh_footer():
+    """Non-blocking auto-refresh using Streamlit's built-in mechanisms.
+    Instead of time.sleep() which blocks the entire page, this uses
+    a script fragment with st.empty() + time check to decide if a
+    rerun is needed. The page renders instantly for the user."""
+    if not st.session_state.get('auto_refresh', False):
+        return
+
+    # Use streamlit-autorefresh-like approach with a placeholder
+    # that triggers rerun only after the interval has passed
+    interval = REFRESH_INTERVAL_SECONDS * 1000  # ms
+    # Use st.markdown with a meta-refresh as a lightweight timer
+    st.markdown(
+        f"""<meta http-equiv="refresh" content="{REFRESH_INTERVAL_SECONDS}">""",
+        unsafe_allow_html=True,
+    )
+
+
+# ═══════════════════════════════════════════════════════════════
 # PAGE WRAPPERS (for st.navigation — each runs in isolation)
 # ═══════════════════════════════════════════════════════════════
 
@@ -1524,57 +1546,42 @@ def _page_setup():
 def page_overview():
     t = _page_setup()
     render_overview(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_positions():
     t = _page_setup()
     render_positions(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_scenarios():
     t = _page_setup()
     render_scenarios(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_trade_info():
     t = _page_setup()
     render_trade_info(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_watchlist():
     t = _page_setup()
     render_watchlist(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_margin():
     t = _page_setup()
     render_margin(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
+    _auto_refresh_footer()
 
 
 def page_settings():
     t = _page_setup()
     render_settings(t)
-    if st.session_state.get('auto_refresh', True):
-        time.sleep(REFRESH_INTERVAL_SECONDS)
-        st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════

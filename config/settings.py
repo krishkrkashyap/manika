@@ -52,7 +52,8 @@ XTS_CONFIG = {
 # ═══════════════════════════════════════════════════════
 # REFRESH SETTINGS
 # ═══════════════════════════════════════════════════════
-REFRESH_INTERVAL_SECONDS = 5
+# On Cloud, use a longer interval to conserve resources
+REFRESH_INTERVAL_SECONDS = 30 if _IS_STREAMLIT_CLOUD else 5
 WEBSOCKET_RECONNECT_DELAY = 5
 
 # ═══════════════════════════════════════════════════════
