@@ -5,6 +5,18 @@ consolidated positions, LAST/INTRA/EXP MTM, per-stock scenarios.
 
 Fixed CSS issues with proper modern Streamlit selectors.
 """
+import sys
+import os
+from pathlib import Path
+
+# ── Ensure the project root is on sys.path so that
+#    `from config.settings import ...` and `from src.* import ...`
+#    work regardless of where this file is executed from
+#    (locally OR on Streamlit Cloud).
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px

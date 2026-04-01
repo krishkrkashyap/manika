@@ -27,3 +27,23 @@ debug_out.txt
 
 # Data (optional - keep if you want to include)
 data/
+
+# Node modules (not needed for Streamlit deployment)
+node_modules/
+package.json
+package-lock.json
+
+# Duplicate repo copies
+main/
+
+# Utility scripts (not needed for deployment)
+tunnel.*
+copy_cookies.py
+get_cookies.py
+create_repo.py
+run_v2.py
+github_page.png
+docs/
+
+# Misc
+*.zip
