@@ -8,7 +8,17 @@ from pathlib import Path
 # PATH CONFIGURATION
 # ═══════════════════════════════════════════════════════
 BASE_DIR = Path(__file__).parent.parent
-DATA_DIR = BASE_DIR / "data"
+
+# On Streamlit Cloud the app directory is READ-ONLY.
+# Use /tmp for any writable data when deployed.
+_IS_STREAMLIT_CLOUD = os.path.exists("/mount/src") or os.getenv("STREAMLIT_SHARING_MODE")
+if _IS_STREAMLIT_CLOUD:
+    DATA_DIR = Path("/tmp/manika_data")
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+else:
+    DATA_DIR = BASE_DIR / "data"
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 
 # ═══════════════════════════════════════════════════════
 # APP CONFIGURATION
